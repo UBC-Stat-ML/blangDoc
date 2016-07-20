@@ -1,6 +1,6 @@
 ## Improving build pipeline
 
-- [ ] Import of bayonet - change of plan: just copy stuff over
+- [x] Import of bayonet - change of plan: just copy stuff over
 - [ ] Upgrade everything to v.10
 - [ ] Publish so as to have other projects using it
 - [ ] See if can get rid of some other config files (in particular, maven ones)
