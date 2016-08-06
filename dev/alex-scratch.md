@@ -4,8 +4,8 @@
 - [x] Upgrade everything to v.10
 - [x] Publish so as to have other projects using it
 - [x] See if can get rid of some other config files (in particular, maven ones) -> No, removing the .pom and .build breaks running child eclipse
-- [ ] Document
-- [ ] Reserve lab
+- [x] Document
+- [x] Reserve lab
 - [ ] Start integration with Silico
 
 Things to test in the meanwhile / maintain:
@@ -13,6 +13,12 @@ Things to test in the meanwhile / maintain:
 1. gradle command line headless builds
 2. eclipse plug-in and/or child instance
 3. test from IDE
+
+## Working prototype
+
+- [x] Try writing a few models
+- [x] Resurrect MCMC sampling
+- [x] Convenient script to run stuff
 
 
 ## Flesh out more doc
