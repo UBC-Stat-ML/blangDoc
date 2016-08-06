@@ -29,4 +29,7 @@ Usage
 
 1. Create a directory for your project, say ``blangProject``
 2. Create a blang file, e.g. an empty model ``model{ laws{} }``, save it as ``blangProject/MyModel.bl``
+    - Note: the extension ``.bl`` is required.
 3. From ``blangProject``, type ``blang MyModel``
+    - This will compile every ``.bl`` file in ``blangProject`` (and its subdirectories, if any)
+    - After compilation, the model ``MyModel`` will be ran (note that the file extension should be stripped here, in parallel to standard Java conventions).
