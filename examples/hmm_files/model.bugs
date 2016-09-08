@@ -1,0 +1,23 @@
+model {
+
+  # indicator
+  for (i in 5:(numberOfDays-5)) {
+    pi[i] <- 1
+  }
+  for (i in 1:4) {
+    pi[i] <- 0
+  }
+  for (i in (numberOfDays-4):numberOfDays) {
+    pi[i] <- 0
+  }
+  segment ~ dcat(pi)
+
+  param1 ~ dgamma(1,1)
+  param2 ~ dgamma(1,1)
+
+  for (i in 1:numberOfDays) {
+    Z[i] <- ifelse(i < segment, param1, param2)
+    T[i] ~ dpois(Z[i])
+  }
+
+}
