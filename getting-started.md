@@ -17,6 +17,7 @@ There are several options:
     - Example: ``MyModel.bl``
 - Paste the following template into the file, **replacing MyModel by your model name (without ``.bl``)**:
 
+
 ```
 package blang.examples
 
@@ -25,8 +26,9 @@ import java.util.*
 import xlinear.*
 
 import static extension blang.utils.ExtensionUtils.* 
-import static extension xlinear.MatrixOperations.* 
-
+import static extension xlinear.MatrixExtensions.* 
+import static blang.utils.StaticUtils.*
+import static xlinear.MatrixOperations.* 
 
 model MyModel { 
 
@@ -91,14 +93,16 @@ import java.util.*
 import xlinear.*
 
 import static extension blang.utils.ExtensionUtils.* 
-import static extension xlinear.MatrixOperations.* 
+import static extension xlinear.MatrixExtensions.* 
+import static blang.utils.StaticUtils.*
+import static xlinear.MatrixOperations.* import blang.types.RealVar.RealScalar
 
 model Doomsday { 
   
   random RealVar Y 
-  random RealVar N
+  random RealVar N          ?: realVar(Y.doubleValue + 1.0)
   
-  param  RealVar priorRate  ?:  createConstantReal(1.0/10.0)
+  param  RealVar priorRate  ?: realVar(1.0/10.0)
   
   laws {
     N | priorRate ~ Exponential(priorRate) 
@@ -165,9 +169,9 @@ Variable need to be explicitly declared. Let us look how this is done in detail:
 
 ```
   random RealVar Y 
-  random RealVar N
+  random RealVar N          ?: realVar(Y.doubleValue + 1.0)
   
-  param  RealVar priorRate  ?:  createConstantReal(1.0/10.0)
+  param  RealVar priorRate  ?: realVar(1.0/10.0)
 ```
 
 First a variable is either ``random`` or ``param``. 
@@ -175,7 +179,7 @@ First a variable is either ``random`` or ``param``.
 - Those marked as ``random`` will be sampled, *unless* they are observed (more on how to define observation below).
 - Those marked as ``param`` are fixed (not sampled), *unless* the model is used as part of a larger one (more on this later).
 
-Then, the variable is given a type. This can be any Java class (although in some cases you may have to write a sampler for objects of that class, more on this later). But often you will be able to use a type provided by the SDK, for example:
+The variable is also given a type. This can be any Java class (although in some cases you may have to write a sampler for objects of that class, more on this later). But often you will be able to use a type provided by the SDK, for example:
 
 - ``RealVar``: this is used to model real valued random variables (technically, Java's ``double``-valued r.v.s). (Note to Java programmer: this is different than ``Double`` since we need a mutable ``Double`` essentially)
 - ``IntVar``: same for random integers (technically, Java's ``int``-valued r.v.s).
@@ -212,15 +216,19 @@ NA
 
 - and load it with ``--model.myVar.file my-observations.csv``. This will initialize ``myVar`` with a list of 4 real variables, where all of them except the third one are observed.
 
-In general, to get instructions on how to load observation for all the variables in the model, provide a dummy command line argument such as ``--help`` to get instructions printed when you run the model.
+In general, to get instructions on how to load observation for all the variables in the model, provide a dummy command line argument such as ``--help`` to get instructions printed when you run the model. This is also useful to create a template for ``configuration.txt``.
 
-When there are no command line argument provided, variables of type ``random`` are generally sampled by default (e.g. for ``RealVar``, ``IntVar``). However, sometimes blang needs to know more information in order to initialize unspecified variables. For example, in order to initialize a matrix, its dimensions need to be specified. To do so, you may use the ``?:`` syntax, exemplified in ``?:  createConstantReal(1.0/10.0)``. The meaning of this is: if a command line argument is provided, use it, if not, initialize the variable with the right hand side. The right hand side can be arbitrary [Xtend expressions](http://www.eclipse.org/xtend/documentation/203_xtend_expressions.html) (a superset of Java). The most common ones can be found in XXXXXXXXXXX
+When there are no command line argument provided, blang needs to know more information in order to initialize unobserved variables. For example, in order to initialize a latent matrix, its dimensions need to be specified. To do so, you should use the ``?:`` syntax, exemplified in ``?:  [1.0/10.0]``. The meaning of this expression is: if a command line argument is provided, use it to initialize the variable, if not, initialize the variable with the right hand side. The right hand side can be an arbitrary [Xtend expression](http://www.eclipse.org/xtend/documentation/203_xtend_expressions.html) (a superset of Java). The most common initialization functions can be found in [StaticUtils](https://github.com/UBC-Stat-ML/blangSDK/blob/master/src/main/java/blang/utils/StaticUtils.xtend).
 
-TODO: point to inits repo to create your own
+Note: when creating a new types, if you want to be able to condition on the values of this new type, you will need to implement a simple parser to read the data in. How this is done is detailed in [this repository](https://github.com/UBC-Stat-ML/inits). 
 
 
 ### Running Monte Carlo simulation and using the posterior distribution
 
-TODO: results folder
+You may set the number of MCMC iterations using the command line argument ``--mcmc.nIterations``. 
 
-TODO: create your own???
+Output is created in the folder ``results/latest``. Previous runs can be found in ``results/all``. Look in particular in the ``samples`` directory to find the Monte Carlo samples for each variable.
+
+The format is in [tidy](http://vita.had.co.nz/papers/tidy-data.pdf) csv format. The first column is always the Monte Carlo iteration index, and the last one, the value at that iteration. List will have one intermediate column for the index in the list. Matrices will have two intermediate columns, one for the row followed by one for the column.  
+
+If too much output is produced, the output can be thinned using ``--mcmc.thinningPeriod 10``, where 10 means to print sample only once every 10 passes on the data.
