@@ -177,7 +177,7 @@ First a variable is either ``random`` or ``param``.
 
 The variable is also given a type. This can be any Java class (although in some cases you may have to write a sampler for objects of that class, more on this later). But often you will be able to use a type provided by the SDK, for example:
 
-- ``RealVar``: this is used to model real valued random variables (technically, Java's ``double``-valued r.v.s). (Note to Java programmer: this is different than ``Double`` since we need a mutable ``Double`` essentially)
+- ``RealVar``: this is used to model real valued random variables (technically, Java's ``double``-valued r.v.s). (Note to Java programmer: ``RealVar`` is different than ``Double`` since we need the variable to be mutable for efficient Monte Carlo inference)
 - ``IntVar``: same for random integers (technically, Java's ``int``-valued r.v.s).
 - ``Matrix``: used for random matrices and vectors (see more documentation [here](https://github.com/alexandrebouchard/xlinear)
 - ``Simplex``: for random vectors summing to one
