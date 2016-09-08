@@ -11,6 +11,7 @@ We assume the material of [getting started](../getting-started.md) has been cove
 - [Available distributions](https://github.com/UBC-Stat-ML/blangSDK/tree/master/src/main/java/blang/distributions)
 - [Available types](https://github.com/UBC-Stat-ML/blangSDK/tree/master/src/main/java/blang/types)
 - [Utility functions, in particular, to instantiate variables](https://github.com/UBC-Stat-ML/blangSDK/blob/master/src/main/java/blang/utils/StaticUtils.xtend)
+- [Reference to useful java packages](https://docs.oracle.com/javase/7/docs/api/java/util/package-summary.html)
 
 ## Data and problem
 
@@ -25,7 +26,7 @@ The question will be the same as in the above book, but we will use a different 
 
 ## Skeleton
 
-Here is a skeleton to start from:
+Here is a skeleton to start from. Start with modelling each day with an iid Poisson for simplicity
 
 ```
 import blang.types.*
@@ -41,14 +42,7 @@ model Texting {
   
   random List<IntVar>     data
   
-  // TODO
-    
-  param  Simplex          initialDist   ?: simplex(2)
-  param  TransitionMatrix transMtx      ?: 
-    transitionMatrix(#[
-      #[0.99, 0.01],
-      #[0.01, 0.99]
-    ])   
+  // TODO  
   
   laws {
     
@@ -57,4 +51,46 @@ model Texting {
   }
 }
 ```
+
+Hint: loops have the form
+
+```
+for (int latentIdx : startInclusive ..< endExclusive) { 
+    ... 
+}
+```
+
+Note: data structures are 0-indexed.
+
+## Adding a mixture structure
+
+Now, introduce some latent states, one for each observation (say integer-value). Use a mixture of two Poissons with prior probability 50-50 on the two mixture components.
+
+Hint: you will need a new list of int valued random variable. To condition on one element in a list, use:
+
+```
+ ... | IntVar curLatent = chain.get(obsIdx), ... ~ ... 
+```
+
+
+## Adding a Markov structure
+
+Make the latent states depend on each other in a "sticky" way (i.e. if one is equal to x, make the probability high that it will stay at x.)
+
+You can fix these parameters as follows:
+
+```
+  param  Simplex          initialDist   ?: simplex(2)
+  param  TransitionMatrix transMtx      ?: 
+    transitionMatrix(#[
+      #[0.99, 0.01],
+      #[0.01, 0.99]
+    ]) 
+```
+
+
+## Making the Markov chain reusable
+
+Pull the code that takes care of the Markov structure into a separate blang file. Invoke that distribution to construct the chain.
+
 
