@@ -19,8 +19,6 @@ There are several options:
 
 
 ```
-package blang.examples
-
 import blang.types.*
 import java.util.*
 import xlinear.*
@@ -86,8 +84,6 @@ N - Y. Let us be optimistic, and let us put an exponential prior on N with a mea
 Let us go over the corresponding blang model:
 
 ```
-package blang.examples
-
 import blang.types.*
 import java.util.*
 import xlinear.*
