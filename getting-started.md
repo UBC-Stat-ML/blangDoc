@@ -6,7 +6,7 @@ There are several options:
 
 - Web: sign in or sign up at [http://54.201.228.108/users/sign_in](http://54.201.228.108/users/sign_in)
 - Command line: [https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md)
-- Eclipse (TODO: instructions)
+- [Eclipse](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-eclipse-ide.md)
 
 
 ## Creating your first model
@@ -50,7 +50,9 @@ model MyModel {
     - Output files appear on the bottom left
 - Command line
     - See [https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md)
-- Eclipse: TODO
+- Eclipse: 
+    - Right-click on ``blangSDK/src/main/java/blang.runtime.Runner``, select ``Run as`` > ``Java application``.
+    - In the ``Arguments`` tab, add ``--model package.ModelYouWantToRun`` (without the ``.bl``) and any other options you want to pass in.
 
 
 ## Building a non-trivial model
