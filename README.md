@@ -4,7 +4,8 @@
 
 Documentation and various natural language documents for blang3 
 
-Start [here](https://github.com/UBC-Stat-ML/blangDoc/blob/master/getting-started.md).
+- [Getting started](https://github.com/UBC-Stat-ML/blangDoc/blob/master/getting-started.md).
+- [A more interesting example demonstrating more advanced features](https://github.com/UBC-Stat-ML/blangDoc/blob/master/examples/hmm.md).
 
 
 
