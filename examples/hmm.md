@@ -2,7 +2,7 @@
 
 ## Abstract
 
-In this tutorial, we will use an example of a widely used model, the HMM, to demonstrate some core blang concepts.
+In this tutorial, we will use an example of a widely used model, the HMM, to demonstrate some core blang concepts. The answers can be found in the examples package.
 
 ## Prerequisites
 
