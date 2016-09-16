@@ -2,7 +2,7 @@
 
 ## Abstract
 
-In this tutorial, we will use an example of a widely used model, the HMM, to demonstrate some core blang concepts. The answers can be found in the examples package.
+In this tutorial, we will use an example of a widely used model, the HMM, to demonstrate some core blang concepts. The answers can be found [here](https://github.com/UBC-Stat-ML/blangSDK/blob/master/src/main/java/blang/examples/Texting.bl). See also more example [here](https://github.com/UBC-Stat-ML/blangSDK/tree/master/src/main/java/blang/examples).
 
 ## Prerequisites
 
