@@ -1,5 +1,13 @@
 # Documentation for blang 3
 
+Blang is a probabilistic programming language with the following objectives in mind:
+
+- **Complex state spaces:** support for models built from both real random variables and discrete/combinatorial random variables such as partitions, trees, matchings, etc. Such state spaces are quite useful in applications such as phylogenetics or Bayesian non-parametrics.
+- **Extensibility:** ability to create arbitrary types, distributions, and samplers. In particular, the standard library is written in blang.
+- **Ease of use:** the language is based on the familiar BUGS language and we provide two IDEs, one web IDE especially useful in a teaching context, featuring cloud MCMC execution and no installation requirement, as well a desktop IDE featuring auto-complete, linking, etc, based on static type analysis.
+- **Efficiency:** based on a portfolio of sampling techniques, in particular, the [Bouncy Particle Sampler](https://arxiv.org/abs/1510.02451), as well as Just-in-Time (JIT) compilation.
+
+
 ## Description
 
 Documentation and various natural language documents for blang3 
