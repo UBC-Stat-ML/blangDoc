@@ -4,9 +4,9 @@
 
 There are several options:
 
+- [Eclipse](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-eclipse-ide.md)
 - Web: sign in or sign up at [http://54.201.228.108/users/sign_in](http://54.201.228.108/users/sign_in)
 - Command line: [https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-from-command-line.md)
-- [Eclipse](https://github.com/UBC-Stat-ML/blangDoc/blob/master/using-eclipse-ide.md)
 
 
 ## Creating your first model
