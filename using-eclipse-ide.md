@@ -15,8 +15,8 @@ Instructions:
 
 1. Clone all github repositories listed at the bottom of [this page](https://github.com/UBC-Stat-ML/blangDoc/).
 2. Download Eclipse Neon **for xtext development**. [Link](http://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr)
-3. In the meanwhile, you can type ``gradle eclipse`` in each of the cloned repo (step 1).
-4. Start eclipse, and import blangDSL as ``Existing project``. Make sure to check the box for adding subprojects.
+3. In the meanwhile, you can type ``gradle eclipse`` in each of the cloned repo (step 1). Note: for blangDSL, run the ``gradle eclipse`` command under the subdirectio
+4. Start eclipse, and import blangDSL as ``Existing project``. **Make sure to check the box for adding subprojects.**
 5. Initially (and if the grammar changes), right-click on  ``ca.ubc.stat.blang/src/ca.ubc.stat.blang/GenerateBlangDsl.mwe2`` and select ``Run as`` > ``MWE2 workflow``. This generates various files for  parsing, lexing, IDE, etc, based on the grammar (``ca.ubc.stat.blang/src/ca.ubc.stat.blangBlangDsl.xtext``).
 6. Once this is finish, you might have to clean and rebuild, then, right click on the project ``ca.ubc.stat.blang`` and select ``Run as`` > ``Eclipse Application``.
 7. This starts a new eclipse, namely the blang editor. Now in this new eclipse..
