@@ -17,7 +17,7 @@ Instructions:
 2. Download Eclipse Neon **for xtext development**. [Link](http://www.eclipse.org/downloads/packages/eclipse-ide-java-and-dsl-developers/neonr)
 3. In the meanwhile, you can type ``gradle eclipse`` in each of the cloned repo (step 1). Note: for blangDSL, run the ``gradle eclipse`` command under the subdirectio
 4. Start eclipse, and import blangDSL as ``Existing project``. **Make sure to check the box for adding subprojects.**
-5. Initially (and if the grammar changes), right-click on  ``ca.ubc.stat.blang/src/ca.ubc.stat.blang/GenerateBlangDsl.mwe2`` and select ``Run as`` > ``MWE2 workflow``. This generates various files for  parsing, lexing, IDE, etc, based on the grammar (``ca.ubc.stat.blang/src/ca.ubc.stat.blangBlangDsl.xtext``).
+5. Initially (and if the grammar changes), right-click on  ``ca.ubc.stat.blang/src/ca.ubc.stat.blang/GenerateBlangDsl.mwe2`` and select ``Run as`` > ``MWE2 workflow``. This generates various files for  parsing, lexing, IDE, etc, based on the grammar (``ca.ubc.stat.blang/src/ca.ubc.stat.blangBlangDsl.xtext``). Note: a potential issue here is that a generated folder may not be included in the path. If you see errors after refreshing and cleaning, right click on ``ca.ubc.stat.blang``, go to properties, java build path, source and make sure ``ca.ubc.stat.blang/src-gen`` is in the list.
 6. Once this is finish, you might have to clean and rebuild, then, right click on the project ``ca.ubc.stat.blang`` and select ``Run as`` > ``Eclipse Application``.
 7. This starts a new eclipse, namely the blang editor. Now in this new eclipse..
 8. Import the project ``blangSDK`` as existing project.
