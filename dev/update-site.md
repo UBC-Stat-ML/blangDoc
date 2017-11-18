@@ -10,3 +10,7 @@
 
 - ``Import projects`` to make sure all sub-projects imported, especially, ``feature`` and ``repository``
 - From project ``ca.ubc.stat.blang.repository``, pic ``Export``, then ``Deployable features``.
+
+## Publish
+
+Then, just make the ``repository`` accessible, e.g. by rsync'ing into a subdirectory of ``blang:/usr/share/nginx/blang``, say ``eclipserepo``.
