@@ -1,0 +1,570 @@
+************************************************************
+**** Rough notes first, but see way below for a summary ****
+************************************************************
+
+
+Rough notes, in chronological order of investigation
+
+
+- tryin .0.8 as backup 
+  - YES! thankfully that works
+
+
+
+- next, retrying fresh install one more time 
+  - first try barebone
+  
+  - Note: had to mvn clean + fix 
+  
+  
+  - when starting eclipse, need to do New config
+  
+  - problem with blangDsl vs blangDSL - path name leftover?
+  
+  
+  - ok some xtend files gets dups with java in same dir - easy but annoying
+  
+  
+  - eclipse is launching!
+  
+  
+  - now org.eclipse.xtext.xbase.resource.BatchLinkableResourceStorageWritable.logIfResourceMismatch(BatchLinkableResourceStorageWritable.java:144)
+
+
+  could be b/c not in sync with blangSDK
+  
+  autoimport!
+  
+  
+  - problem seems to be with the exported feature thing
+  - manually create update site? painful
+  - note : child eclipse now runs on latest - can we somehow extract plugins from it?
+  - looks like auto-import not working - or symptom of an underlying failure?
+  
+  
+  JUST SELECT THE FIRST FEATURE [NOT DEV ONE]???
+  
+  
+  Ah! ah! blangSDK also fails with gradle now... this is much more tractabl
+  
+  
+  4.0.0 OK
+  
+  4.0.7 OK <--- might actually be ok on Java 15?? Yes... + eclipse plug in works
+  
+  4.0.8 OK  -- BUT -- uses non Java 15 compatible xtext
+  
+  == point where started "fresh" repo ==
+  
+  4.1.0 Not OK
+  
+  Observation: since the child eclipse works.. suggest problem is with the deploy
+    in fact, with the gradle deployment itself...
+  
+  
+  
+  
+eclipse.buildId=4.18.0.I20201202-1800
+java.version=12
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_CA
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -keyring /Users/bouchard/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.dsl.product -keyring /Users/bouchard/.eclipse_keyring
+
+org.apache.log4j
+Error
+Tue Mar 16 15:27:00 PDT 2021
+org.eclipse.xtext.xbase.resource.BatchLinkableResource  - resolution of uriFragment '/0' failed.
+
+
+java.lang.RuntimeException: java.lang.ClassNotFoundException: void cannot be found by ca.ubc.stat.blang_1.0.0.202103162218
+	at org.eclipse.xtext.resource.DerivedStateAwareResource.installDerivedState(DerivedStateAwareResource.java:253)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getContents(BatchLinkableResource.java:149)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObjectForURIFragmentRootSegment(ResourceImpl.java:766)
+	at org.eclipse.xtext.resource.DerivedStateAwareResource.getEObjectForURIFragmentRootSegment(DerivedStateAwareResource.java:213)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObject(ResourceImpl.java:808)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObject(ResourceImpl.java:787)
+	at org.eclipse.xtext.resource.XtextResource.access$101(XtextResource.java:64)
+	at org.eclipse.xtext.resource.XtextResource$1.getEObject(XtextResource.java:120)
+	at org.eclipse.xtext.resource.DefaultFragmentProvider.getEObject(DefaultFragmentProvider.java:29)
+	at org.eclipse.xtext.resource.XtextResource.basicGetEObject(XtextResource.java:364)
+	at org.eclipse.xtext.resource.XtextResource.getEObject(XtextResource.java:350)
+	at org.eclipse.xtext.linking.lazy.LazyLinkingResource.getEObject(LazyLinkingResource.java:247)
+	at org.eclipse.xtext.resource.persistence.StorageAwareResource.getEObject(StorageAwareResource.java:100)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getEObject(BatchLinkableResource.java:125)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getEObject(ResourceSetImpl.java:223)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:209)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:231)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:269)
+	at org.eclipse.emf.ecore.impl.BasicEObjectImpl.eResolveProxy(BasicEObjectImpl.java:1516)
+	at ca.ubc.stat.blang.blangDsl.impl.BlangDistImpl.getDistributionType(BlangDistImpl.java:74)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.blangConstructorParameters(SingleBlangModelInferrer.java:1311)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer._constructorParameters(SingleBlangModelInferrer.java:1307)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.constructorParameters(SingleBlangModelInferrer.java:1457)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer._instantiateFactor(SingleBlangModelInferrer.java:1255)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.instantiateFactor(SingleBlangModelInferrer.java:1435)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.access$8(SingleBlangModelInferrer.java:1433)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer$16.appendTo(SingleBlangModelInferrer.java:1208)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:199)
+	at org.eclipse.xtend2.lib.StringConcatenation$SimpleTarget.append(StringConcatenation.java:698)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer$13.appendTo(SingleBlangModelInferrer.java:1058)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:177)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:278)
+	at ca.ubc.stat.blang.StaticUtils.eagerlyEvaluate(StaticUtils.java:86)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.infer(SingleBlangModelInferrer.java:169)
+	at ca.ubc.stat.blang.jvmmodel.BlangDslJvmModelInferrer.lambda$0(BlangDslJvmModelInferrer.java:71)
+	at org.eclipse.xtext.xbase.jvmmodel.JvmModelAssociator$1.run(JvmModelAssociator.java:398)
+	at org.eclipse.xtext.xbase.jvmmodel.JvmModelAssociator.installDerivedState(JvmModelAssociator.java:408)
+	at org.eclipse.xtext.resource.DerivedStateAwareResource.installDerivedState(DerivedStateAwareResource.java:244)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getContents(BatchLinkableResource.java:149)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObjectForURIFragmentRootSegment(ResourceImpl.java:766)
+	at org.eclipse.xtext.resource.DerivedStateAwareResource.getEObjectForURIFragmentRootSegment(DerivedStateAwareResource.java:213)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObject(ResourceImpl.java:808)
+	at org.eclipse.emf.ecore.resource.impl.ResourceImpl.getEObject(ResourceImpl.java:787)
+	at org.eclipse.xtext.resource.XtextResource.access$101(XtextResource.java:64)
+	at org.eclipse.xtext.resource.XtextResource$1.getEObject(XtextResource.java:120)
+	at org.eclipse.xtext.resource.DefaultFragmentProvider.getEObject(DefaultFragmentProvider.java:29)
+	at org.eclipse.xtext.resource.XtextResource.basicGetEObject(XtextResource.java:364)
+	at org.eclipse.xtext.resource.XtextResource.getEObject(XtextResource.java:350)
+	at org.eclipse.xtext.linking.lazy.LazyLinkingResource.getEObject(LazyLinkingResource.java:247)
+	at org.eclipse.xtext.resource.persistence.StorageAwareResource.getEObject(StorageAwareResource.java:100)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getEObject(BatchLinkableResource.java:125)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getEObject(ResourceSetImpl.java:223)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:209)
+	at org.eclipse.xtext.common.types.access.impl.IndexedJvmTypeAccess.getAccessibleType(IndexedJvmTypeAccess.java:143)
+	at org.eclipse.xtext.common.types.xtext.ui.JdtIndexedJvmTypeAccess.findAccessibleType(JdtIndexedJvmTypeAccess.java:65)
+	at org.eclipse.xtext.common.types.access.impl.IndexedJvmTypeAccess.getIndexedJvmType(IndexedJvmTypeAccess.java:111)
+	at org.eclipse.xtext.common.types.access.impl.IndexedJvmTypeAccess.getIndexedJvmType(IndexedJvmTypeAccess.java:94)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.findObjectTypeInIndex(JdtTypeProvider.java:589)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.findLoadedOrDerivedObjectType(JdtTypeProvider.java:260)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.doFindObjectType(JdtTypeProvider.java:208)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.findObjectType(JdtTypeProvider.java:196)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.doFindTypeByName(JdtTypeProvider.java:154)
+	at org.eclipse.xtext.common.types.access.jdt.JdtTypeProvider.findTypeByName(JdtTypeProvider.java:163)
+	at org.eclipse.xtext.common.types.xtext.AbstractTypeScope.getSingleElement(AbstractTypeScope.java:60)
+	at org.eclipse.xtext.common.types.xtext.AbstractTypeScope.getSingleElement(AbstractTypeScope.java:55)
+	at org.eclipse.xtend.core.scoping.LocalResourceFilteringTypeScope.getSingleElement(LocalResourceFilteringTypeScope.java:43)
+	at org.eclipse.xtend.core.scoping.RecordingTypeScope.getSingleElement(RecordingTypeScope.java:52)
+	at org.eclipse.xtext.scoping.impl.AbstractScope.getSingleElement(AbstractScope.java:109)
+	at org.eclipse.xtext.linking.impl.DefaultLinkingService.getLinkedObjects(DefaultLinkingService.java:115)
+	at org.eclipse.xtext.linking.lazy.LazyLinkingResource.getEObject(LazyLinkingResource.java:266)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getEObject(BatchLinkableResource.java:120)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getEObject(ResourceSetImpl.java:223)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:209)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:269)
+	at org.eclipse.emf.ecore.impl.BasicEObjectImpl.eResolveProxy(BasicEObjectImpl.java:1516)
+	at org.eclipse.xtext.xtype.impl.XImportDeclarationImpl.getImportedType(XImportDeclarationImpl.java:262)
+	at org.eclipse.xtend.core.scoping.XtendImportedNamespaceScopeProvider.getImportScope(XtendImportedNamespaceScopeProvider.java:285)
+	at org.eclipse.xtend.core.scoping.XtendImportedNamespaceScopeProvider.access$2(XtendImportedNamespaceScopeProvider.java:263)
+	at org.eclipse.xtend.core.scoping.XtendImportedNamespaceScopeProvider$1.get(XtendImportedNamespaceScopeProvider.java:132)
+	at org.eclipse.xtend.core.scoping.XtendImportedNamespaceScopeProvider$1.get(XtendImportedNamespaceScopeProvider.java:1)
+	at org.eclipse.xtext.util.OnChangeEvictingCache.get(OnChangeEvictingCache.java:76)
+	at org.eclipse.xtend.core.scoping.XtendImportedNamespaceScopeProvider.getScope(XtendImportedNamespaceScopeProvider.java:120)
+	at org.eclipse.xtext.xbase.scoping.batch.TypeScopes.createTypeScope(TypeScopes.java:60)
+	at org.eclipse.xtext.xbase.scoping.batch.XbaseBatchScopeProvider.getScope(XbaseBatchScopeProvider.java:113)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsBatchScopeProvider.getScope(XbaseWithAnnotationsBatchScopeProvider.java:54)
+	at org.eclipse.xtext.linking.impl.DefaultLinkingService.getScope(DefaultLinkingService.java:59)
+	at org.eclipse.xtext.linking.impl.DefaultLinkingService.getLinkedObjects(DefaultLinkingService.java:108)
+	at org.eclipse.xtext.linking.lazy.LazyLinkingResource.getEObject(LazyLinkingResource.java:266)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.getEObject(BatchLinkableResource.java:120)
+	at org.eclipse.emf.ecore.resource.impl.ResourceSetImpl.getEObject(ResourceSetImpl.java:223)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:209)
+	at org.eclipse.emf.ecore.util.EcoreUtil.resolve(EcoreUtil.java:269)
+	at org.eclipse.emf.ecore.impl.BasicEObjectImpl.eResolveProxy(BasicEObjectImpl.java:1516)
+	at org.eclipse.xtext.xbase.annotations.xAnnotations.impl.XAnnotationImpl.getAnnotationType(XAnnotationImpl.java:131)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer$1.apply(XtendJvmModelInferrer.java:797)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer$1.apply(XtendJvmModelInferrer.java:1)
+	at com.google.common.collect.Iterators$5.computeNext(Iterators.java:637)
+	at com.google.common.collect.AbstractIterator.tryToComputeNext(AbstractIterator.java:141)
+	at com.google.common.collect.AbstractIterator.hasNext(AbstractIterator.java:136)
+	at org.eclipse.xtext.xbase.jvmmodel.JvmTypesBuilder.addAnnotations(JvmTypesBuilder.java:1358)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer.translateAnnotationsTo(XtendJvmModelInferrer.java:366)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer.translateParameter(XtendJvmModelInferrer.java:715)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer.transform(XtendJvmModelInferrer.java:607)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer.transform(XtendJvmModelInferrer.java:572)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer.initialize(XtendJvmModelInferrer.java:405)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer$5.run(XtendJvmModelInferrer.java:279)
+	at org.eclipse.xtend.core.jvmmodel.XtendJvmModelInferrer$3.run(XtendJvmModelInferrer.java:219)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.ensureJvmMembersInitialized(BatchLinkableResource.java:232)
+	at org.eclipse.xtext.common.types.impl.JvmDeclaredTypeImplCustom.checkPendingInitialization(JvmDeclaredTypeImplCustom.java:546)
+	at org.eclipse.xtext.common.types.impl.JvmDeclaredTypeImplCustom.getVisibility(JvmDeclaredTypeImplCustom.java:632)
+	at org.eclipse.xtext.xbase.typesystem.util.ContextualVisibilityHelper.isVisible(ContextualVisibilityHelper.java:76)
+	at org.eclipse.xtext.xbase.scoping.batch.FeatureScopeSessionWithContext.isVisible(FeatureScopeSessionWithContext.java:40)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractNestedFeatureScopeSession.isVisible(AbstractNestedFeatureScopeSession.java:141)
+	at org.eclipse.xtext.xbase.scoping.batch.TypeLiteralScope.isVisible(TypeLiteralScope.java:68)
+	at org.eclipse.xtext.xbase.scoping.batch.TypeLiteralScope.getLocalElementsByName(TypeLiteralScope.java:54)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:175)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractSessionBasedScope.getElements(AbstractSessionBasedScope.java:177)
+	at org.eclipse.xtext.xbase.scoping.batch.LocalVariableScope.getElements(LocalVariableScope.java:85)
+	at org.eclipse.xtext.xbase.typesystem.internal.ScopeProviderAccess.getCandidateDescriptions(ScopeProviderAccess.java:144)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.getLinkingCandidates(AbstractTypeComputationState.java:410)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer._computeTypes(XbaseTypeComputer.java:1227)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer.computeTypes(XbaseTypeComputer.java:113)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsTypeComputer.computeTypes(XbaseWithAnnotationsTypeComputer.java:47)
+	at org.eclipse.xtend.core.typesystem.XtendTypeComputer.computeTypes(XtendTypeComputer.java:65)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.doComputeTypes(AbstractTypeComputationState.java:122)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.computeTypes(AbstractTypeComputationState.java:110)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState$1.getActualType(AbstractTypeComputationState.java:404)
+	at org.eclipse.xtext.xbase.scoping.batch.FeatureScopes.createFeatureCallScopeForReceiver(FeatureScopes.java:216)
+	at org.eclipse.xtext.xbase.scoping.batch.FeatureScopes.createFeatureCallScope(FeatureScopes.java:93)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractFeatureScopeSession.createFeatureCallScope(AbstractFeatureScopeSession.java:178)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractFeatureScopeSession.getScope(AbstractFeatureScopeSession.java:49)
+	at org.eclipse.xtext.xbase.typesystem.internal.ScopeProviderAccess.getCandidateDescriptions(ScopeProviderAccess.java:143)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.getLinkingCandidates(AbstractTypeComputationState.java:410)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer._computeTypes(XbaseTypeComputer.java:1227)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer.computeTypes(XbaseTypeComputer.java:113)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsTypeComputer.computeTypes(XbaseWithAnnotationsTypeComputer.java:47)
+	at org.eclipse.xtend.core.typesystem.XtendTypeComputer.computeTypes(XtendTypeComputer.java:65)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.doComputeTypes(AbstractTypeComputationState.java:122)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.computeTypes(AbstractTypeComputationState.java:110)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState$1.getActualType(AbstractTypeComputationState.java:404)
+	at org.eclipse.xtext.xbase.scoping.batch.FeatureScopes.createFeatureCallScopeForReceiver(FeatureScopes.java:216)
+	at org.eclipse.xtext.xbase.scoping.batch.FeatureScopes.createFeatureCallScope(FeatureScopes.java:93)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractFeatureScopeSession.createFeatureCallScope(AbstractFeatureScopeSession.java:178)
+	at org.eclipse.xtext.xbase.scoping.batch.AbstractFeatureScopeSession.getScope(AbstractFeatureScopeSession.java:49)
+	at org.eclipse.xtext.xbase.typesystem.internal.ScopeProviderAccess.getCandidateDescriptions(ScopeProviderAccess.java:143)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.getLinkingCandidates(AbstractTypeComputationState.java:410)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer._computeTypes(XbaseTypeComputer.java:1227)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer.computeTypes(XbaseTypeComputer.java:113)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsTypeComputer.computeTypes(XbaseWithAnnotationsTypeComputer.java:47)
+	at org.eclipse.xtend.core.typesystem.XtendTypeComputer.computeTypes(XtendTypeComputer.java:65)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.doComputeTypes(AbstractTypeComputationState.java:122)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.computeTypes(AbstractTypeComputationState.java:110)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.resolveArgumentType(AbstractLinkingCandidate.java:628)
+	at org.eclipse.xtext.xbase.typesystem.internal.FeatureLinkingCandidate.resolveArgumentType(FeatureLinkingCandidate.java:964)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.computeFixedArityArgumentType(AbstractLinkingCandidate.java:580)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.computeArgumentType(AbstractLinkingCandidate.java:444)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.computeArgumentTypes(AbstractLinkingCandidate.java:431)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.preApply(AbstractLinkingCandidate.java:379)
+	at org.eclipse.xtext.xbase.typesystem.internal.FeatureLinkingCandidate.preApply(FeatureLinkingCandidate.java:897)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractLinkingCandidate.applyToComputationState(AbstractLinkingCandidate.java:287)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState$5.applyToComputationState(AbstractTypeComputationState.java:512)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer._computeTypes(XbaseTypeComputer.java:1223)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer.computeTypes(XbaseTypeComputer.java:111)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsTypeComputer.computeTypes(XbaseWithAnnotationsTypeComputer.java:47)
+	at org.eclipse.xtend.core.typesystem.XtendTypeComputer.computeTypes(XtendTypeComputer.java:65)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.doComputeTypes(AbstractTypeComputationState.java:122)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.computeTypes(AbstractTypeComputationState.java:110)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer._computeTypes(XbaseTypeComputer.java:484)
+	at org.eclipse.xtext.xbase.typesystem.computation.XbaseTypeComputer.computeTypes(XbaseTypeComputer.java:119)
+	at org.eclipse.xtext.xbase.annotations.typesystem.XbaseWithAnnotationsTypeComputer.computeTypes(XbaseWithAnnotationsTypeComputer.java:47)
+	at org.eclipse.xtend.core.typesystem.XtendTypeComputer.computeTypes(XtendTypeComputer.java:65)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.doComputeTypes(AbstractTypeComputationState.java:122)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractTypeComputationState.computeTypes(AbstractTypeComputationState.java:110)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractRootTypeComputationState.computeTypes(AbstractRootTypeComputationState.java:33)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver._computeTypes(LogicalContainerAwareReentrantTypeResolver.java:828)
+	at org.eclipse.xtend.core.typesystem.XtendReentrantTypeResolver._computeTypes(XtendReentrantTypeResolver.java:613)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver.computeTypes(LogicalContainerAwareReentrantTypeResolver.java:712)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver.computeMemberTypes(LogicalContainerAwareReentrantTypeResolver.java:898)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver._computeTypes(LogicalContainerAwareReentrantTypeResolver.java:887)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver.computeTypes(LogicalContainerAwareReentrantTypeResolver.java:706)
+	at org.eclipse.xtext.xbase.typesystem.internal.LogicalContainerAwareReentrantTypeResolver.computeTypes(LogicalContainerAwareReentrantTypeResolver.java:698)
+	at org.eclipse.xtend.core.typesystem.XtendReentrantTypeResolver.computeTypes(XtendReentrantTypeResolver.java:383)
+	at org.eclipse.xtext.xbase.typesystem.internal.DefaultReentrantTypeResolver.resolve(DefaultReentrantTypeResolver.java:165)
+	at org.eclipse.xtext.xbase.typesystem.internal.DefaultReentrantTypeResolver.reentrantResolve(DefaultReentrantTypeResolver.java:140)
+	at org.eclipse.xtext.xbase.typesystem.internal.CompoundReentrantTypeResolver.reentrantResolve(CompoundReentrantTypeResolver.java:80)
+	at org.eclipse.xtext.xbase.typesystem.internal.CachingBatchTypeResolver$LazyResolvedTypes.resolveTypes(CachingBatchTypeResolver.java:81)
+	at org.eclipse.xtext.xbase.typesystem.internal.CachingBatchTypeResolver$2.process(CachingBatchTypeResolver.java:58)
+	at org.eclipse.xtext.xbase.typesystem.internal.CachingBatchTypeResolver$2.process(CachingBatchTypeResolver.java:54)
+	at org.eclipse.xtext.util.concurrent.IUnitOfWork$Void.exec(IUnitOfWork.java:38)
+	at org.eclipse.xtext.util.OnChangeEvictingCache.execWithoutCacheClear(OnChangeEvictingCache.java:135)
+	at org.eclipse.xtext.xbase.typesystem.internal.CachingBatchTypeResolver.doResolveTypes(CachingBatchTypeResolver.java:54)
+	at org.eclipse.xtext.xbase.typesystem.internal.AbstractBatchTypeResolver.resolveTypes(AbstractBatchTypeResolver.java:70)
+	at org.eclipse.xtext.xbase.resource.BatchLinkingService.resolveBatched(BatchLinkingService.java:72)
+	at org.eclipse.xtext.xbase.resource.BatchLinkableResource.resolveLazyCrossReferences(BatchLinkableResource.java:166)
+	at org.eclipse.xtext.EcoreUtil2.resolveLazyCrossReferences(EcoreUtil2.java:505)
+	at org.eclipse.xtext.builder.clustering.ClusteringBuilderState.doUpdate(ClusteringBuilderState.java:232)
+	at org.eclipse.xtext.builder.builderState.AbstractBuilderState.update(AbstractBuilderState.java:164)
+	at org.eclipse.xtext.builder.impl.XtextBuilder.doBuild(XtextBuilder.java:388)
+	at org.eclipse.xtext.builder.impl.XtextBuilder.addInfosFromTaskAndBuild(XtextBuilder.java:322)
+	at org.eclipse.xtext.builder.impl.XtextBuilder.fullBuild(XtextBuilder.java:429)
+	at org.eclipse.xtext.builder.impl.XtextBuilder.build(XtextBuilder.java:202)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:845)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:228)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:276)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:329)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:332)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:384)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:405)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:154)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:244)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: java.lang.ClassNotFoundException: void cannot be found by ca.ubc.stat.blang_1.0.0.202103162218
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:516)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:171)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:521)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:332)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer._constructorParameters(SingleBlangModelInferrer.java:1337)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.constructorParameters(SingleBlangModelInferrer.java:1459)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer._instantiateFactor(SingleBlangModelInferrer.java:1255)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.instantiateFactor(SingleBlangModelInferrer.java:1435)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.access$8(SingleBlangModelInferrer.java:1433)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer$16.appendTo(SingleBlangModelInferrer.java:1208)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:309)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:227)
+	at org.eclipse.xtend2.lib.StringConcatenation$SimpleTarget.append(StringConcatenation.java:691)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer$14.appendTo(SingleBlangModelInferrer.java:1099)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:199)
+	at org.eclipse.xtend2.lib.StringConcatenation$SimpleTarget.append(StringConcatenation.java:698)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer$13.appendTo(SingleBlangModelInferrer.java:1058)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:177)
+	at org.eclipse.xtend2.lib.StringConcatenation.append(StringConcatenation.java:278)
+	at ca.ubc.stat.blang.StaticUtils.eagerlyEvaluate(StaticUtils.java:86)
+	at ca.ubc.stat.blang.jvmmodel.SingleBlangModelInferrer.infer(SingleBlangModelInferrer.java:169)
+	at ca.ubc.stat.blang.jvmmodel.BlangDslJvmModelInferrer.lambda$0(BlangDslJvmModelInferrer.java:71)
+	at org.eclipse.xtext.xbase.jvmmodel.JvmModelAssociator$1.run(JvmModelAssociator.java:398)
+	at org.eclipse.xtext.xbase.jvmmodel.JvmModelAssociator.installDerivedState(JvmModelAssociator.java:408)
+	at org.eclipse.xtext.resource.DerivedStateAwareResource.installDerivedState(DerivedStateAwareResource.java:244)
+	... 222 more
+
+
+
+
+BACKUP OF OLD TAGS
+
+4.1.5 - 7ccc19ba32d3085f94b248edfc5afb45bc3bd1b9
+4.1.0 - 2c7d8ee811ffd0cf2b396e426fd633a6b89cc314
+4.0.8 - ff05960ff7865bc7522f8fedea49c8721c76164b
+
+
+
+
+CHECKING WHEN mvn install -U work in history
+  basically never; various error in dependency hell
+    signer information does not match signer information of other classes in the same package..
+    tycho errors
+    bundle not found
+    etc
+    
+so we can't rely on a past check point -- arg
+next will be minimal working example where things fail in new pipeline?
+
+
+
+
+***********************************
+**** Summary of current status ****
+***********************************
+
+### Context
+
+This started as an attempt to increment xtext's version in order to gain compatibility with 
+Java 15 (Java 8 and 11 was OK, but due to libraries doing byte code manips, Java 15 did 
+not compile latest blang releases even after upgrading gradlew). 
+
+
+### Messy-ness / Opaque-ness of maven files
+
+Versions are spread in many pom, manifest, etc. All recent attempts to upgrade xtext has 
+been done by guessing which version to increment and which not to. This probably led to the 
+next:
+
+
+### Failing maven pipeline
+
+While doing this, I also discovered that the mvn pipeline, used for eclipse plug-in 
+publishing (but not artifact publishing), is broken. 
+
+This probably went un-noticed for a while, since the bash script doing the 
+maven compilation was not looking for the return 
+status of mvn, and was probably grabbing old leftovers. Indeed, I noticed that some of the 
+eclipse plug-in jar files, e.g. 4.0.7, do not include changes made earlier to the DSL, e.g.
+the jar file used in it contains ca/ubc/stat/blang/blangDsl/ForLoop but not 
+ca/ubc/stat/blang/blangDsl/IfElse while "laws-level if-else" was introduced earlier than 4.0.7, namely 
+4.0.7 is in March 11 2021 and IfElse was introduced on June 22, 2019 at 10:43:19 PDT. 
+Another factor why this went un-noticed is that I have been using the "child eclipse" 
+method + CLI, neither of which use the eclipse plugin. 
+
+In fact, it looks like even going back to several old and very old blangDSL configs, mvn 
+is not working properly for a variety of reasons (oldest one, something about different 
+signature of jars for different artifact, i.e. upstream build decay; other errors that were 
+harder to interpret on quick inspection). (I was able to get mvn to work on the 
+fresh stub attempt described below, but it had its own problems) 
+
+  ** BUT: https://www.stat.ubc.ca/~bouchard/maven/com/github/UBC-Stat-ML/blangDSL/ca.ubc.stat.blang.ide/4.0.7/ 
+     IS OK i.e. contains if-else [so we are fine for now since that's what blang CLI uses]
+  ** ALSO:https://jitpack.io/com/github/UBC-Stat-ML/blangDSL/ca.ubc.stat.blang/4.0.7/ca.ubc.stat.blang-4.0.7.jar
+  ** BUT: NOTE THESE ARE EMPTY: https://jitpack.io/com/github/UBC-Stat-ML/blangDSL/4.0.7/
+  
+  --> just to check, added a test case with if {} else {} in blangSDK - seems OK for submission then!
+  
+  
+### Eclipse requirement?
+
+Some sources seemed to suggest xtext versions not being compatible with all eclipse versions. 
+I wish I had taken better notes but it was pretty vague but it make sense there would be 
+tying between xtext versions and eclipse and certainly old enough eclipse would make xtext 
+fail. Unfortunately this is not documented. 
+
+Indeed, after upgrading to eclipse DSL '2020-12', I could not longer start a child eclipse 
+[the option was not even offered when right-clicking on DSL files]. 
+
+This motivated:
+  
+  
+### Attempt resolution with a 'clean slate' blangDSL
+
+Some of the stub files generated when creating a DSL project might no longer be up-to-date. 
+So I tried creating a new DSL project in the latest eclipse (and indeed for that project, 
+launching child eclipse did work), and migrate the blangDSL sources into these fresh stubs. 
+
+This process can be followed in the branch 'wip-reset-of-dsl-build'. This restored the 
+ability to run a child eclipse process. However, this lead to:
+
+1. building SDK based on those DSL release not working 
+2. noticing that mvn was not working
+  a. ended up working after some effort
+  b. however, in an eclipse importing the plug-in, led to issue 1
+  
+In both 1 and 2b, the reported error was that classes which are supposed 
+to be auto-imported, e.g. 'RealVar', not being resolved. 
+
+To replicate, simply change the blang version in blangSDK/gradle.build to 4.1.5, then 
+run ./gradlew clean assemble
+
+a) Most have the form "ERROR:IntVar cannot be resolved to a type."
+a') Also with features not in blang.core "ERROR:The method or field NEGATIVE_INFINITY is undefined"
+
+b) But other ones like ERROR:Void functions cannot return a value." [but this could be caused by unit not compiling because of a/a'
+
+Some hypotheses
+
+A The first category of error (a&a') (and all the numerous other ones not shown) would fit 
+with the hypothesis that the code generation process not having class path access to 
+blang.core and also other xtend files in the blangSDK project. 
+
+B The first category of error (a&a') could also be the auto-import hooks not getting picked up. 
+  This actually seems more likely, otherwise we would expect to see more errors, also 
+  tried similar small example when faced 2b, and a small example not relying on auto-import
+  did work (and looking at generated files, they include stuff from blang.core)
+
+Potential next step there: a minimal reproducible example, probably best to start with B?
+
+
+### Uncertainty over jitpack setup
+
+Context: jitpack repo support was added relatively recently---motivated by stats server being down; 
+then the week after it was jitpack down, so I decided to keep both maven repos to reduce 
+risk of upstream maven repo failure. 
+
+But while dual jitpack-stat maven was tested robustly for SDK, it was more problematic 
+with DSL because of complex naming structure. So there could be interfering problems there.
+
+
+### Possible ingredient for resolution: abandon mvn 
+
+Eclipse feature plug-in does not contain dependency info and is not super complex.. 
+
+  ->  could abandon the mvn script perhaps and assemble the site "manually" 
+      (i.e. based on custom script...)
+      
+  ??? double check .. ca.ubc.stat.blang.ide might inside it?
+  
+Note: xtext team is taking about getting rid of gradle builds... but anyways we are too  
+      deep with gradle now
+      
+      
+********************************************
+**** Next possible moves for resolution ****
+********************************************
+
+While current state is OK for now, because it work in CLI, but the fact that "if else" 
+will not currently work in eclipse plugin, some resolution is still needed. 
+
+At least 2 routes:
+
+I. fix from 4.1.5 clean slate / fix auto-import
+    Comparative pros:
+      +? if we want to go with LSP but search below seems unlikely to be a good idea to go with LSP
+      + seems to be doing some automatical test on eclipse which is nice
+      +? child eclipse works (should move away from this anyways; cases where actually useful -DSL debuggin- are exceedingly rare)
+
+II. fix from 4.0.7 by getting rid of mvn and replacing by custom scripts (TODO: double check that indeed plug-ins super simple)
+    Comparative pros 
+      + mvn build seems fragile b/c of eclipse p2 deps
+      + hard to configure mvn, versions all over the place
+      
+=> go for II after double checking above TODO
+       
+
+*********************************************
+**** Solutions moving forward once fixed ****
+*********************************************
+
+
+### High-level view
+
+Xtext is likely to get off the release train soon, and maintenance is already minimal. 
+They might also get rid of gradle which we are using too deeply to get rid of. 
+
+Thankfully, we are not waiting for any new feature from xtext and DSL is rarely required 
+to change. But we want to be able to keep maintaining blang DSL. 
+
+The main issues are:
+
+- New users typically will install the latest Java. For now we may be OK, Java 15 seems 
+  workable. But this may be one of the last one. 
+    - clearer instructions
+    - keep archive of test JVMs
+    - keep archive of eclipses
+- Build process should be future-proof. 
+- Should at least do the M1 transition (thankfully, https://adoptopenjdk.net/releases.html 
+  has an aarch64 release for JDK 11, still should test it if possible)
+
+
+### Future-proof build pipeline
+
+- Containerization?
+- Cache all dependencies, e.g. 
+    https://gist.github.com/bmuschko/e4e04abca105c397145e
+    https://softwareengineering.stackexchange.com/questions/331817/self-contained-projects-gradle-maven-dependencies-offline
+
+- Another idea would be to capture and cache all network requests - NO - CANNOT WORK B/C OF CRYPTO
+    "strace" seems to do that, see second answer in:
+        https://askubuntu.com/questions/11709/how-can-i-capture-network-traffic-of-a-single-process
+        
+    ---> generic tool to check and maintain determinism -> probably would not work
+            - run a first time, capture network 
+            - rerun feeding cached network
+            - difficulties: time, multithreading might cause different order for tasks
+            
+
+### Future-proofing Java
+
+Look at some of the open JDK that are open source so that we can save the installer. 
+
+Containers will help for that too... 
+            
+
+### Future-proofing eclipse?
+
+Harder but maybe not as critical. 
+
+At the very least, document better which versions are tested. 
+
+Keep a copy of the installers too in case they don't archive them propertly. 
+
+Move to LSP? - NO
+  - resources, tutorials are scarse, there is this one https://github.com/svenefftinge/xtext-lsp-workshop/
+    and a few other ones but seems too little available. Migration would be tons of work...
+  - and for a feature to work, needs to be in (1) xtext AND (2) LSP AND (3) editor
+    so the common lowest denominator is almost certainly too little to be useful
+  - see also comments in https://github.com/svenefftinge/xtext-lsp-workshop/, one users 
+    says for a complex project this is too slow. others that basic feature don't work
+  
+
+
+
