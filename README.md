@@ -11,6 +11,8 @@ This repository hosts some documentation mostly useful for Blang developers.
 - [BlangDoc](https://github.com/UBC-Stat-ML/blangDoc) (this) 
 - [BlangSDK](https://github.com/UBC-Stat-ML/blangSDK/) (main one users will interact with) [![Build Status](https://travis-ci.org/UBC-Stat-ML/blangSDK.png?branch=master)](https://travis-ci.org/UBC-Stat-ML/blangSDK)
 - [BlangDSL](https://github.com/UBC-Stat-ML/blangDSL/) (low-level) [![Build Status](https://travis-ci.org/UBC-Stat-ML/blangDSL.png?branch=master)](https://travis-ci.org/UBC-Stat-ML/blangDSL.png) 
+- [BlangExample](https://github.com/UBC-Stat-ML/blangExample) (template for advanced CLI Blang usage)
+- [BlangDemos](https://github.com/UBC-Stat-ML/blangDemos) (some examples and demos of Blang models)
 
 Other related repos:
 
